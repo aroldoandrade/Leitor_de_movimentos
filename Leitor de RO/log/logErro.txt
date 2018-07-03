@@ -1,0 +1,32 @@
+
+
+-----------------------------------------------------------------
+java.lang.StringIndexOutOfBoundsException: String index out of range: 932
+Metodo: trataArquivo nome Arquivo: 9a6420444ec94ab5745813345b148ff90da92e.TXT  Classe: Controle_validador
+Tue Jun 12 14:24:18 BRT 2018
+------------------------------------------------------------------
+-----------------------------------------------------------------
+java.lang.StringIndexOutOfBoundsException: String index out of range: 932
+Metodo: trataArquivo nome Arquivo: 9a6420444ec94ab5745813345b148ff90da92e.TXT  Classe: Controle_validador
+Tue Jun 12 14:25:37 BRT 2018
+------------------------------------------------------------------
+-----------------------------------------------------------------
+java.lang.NumberFormatException: For input string: "             06025"
+Metodo: trataArquivo nome Arquivo: cddc7ef5d4282ea15319d156624eaf55460757.TXT  Classe: Controle_validador
+Tue Jun 12 15:11:09 BRT 2018
+------------------------------------------------------------------
+-----------------------------------------------------------------
+java.lang.StringIndexOutOfBoundsException: String index out of range: 932
+Metodo: trataArquivo nome Arquivo: 9a6420444ec94ab5745813345b148ff90da92e.TXT  Classe: Controle_validador
+Wed Jun 13 13:51:28 BRT 2018
+------------------------------------------------------------------
+-----------------------------------------------------------------
+java.lang.StringIndexOutOfBoundsException: String index out of range: 132
+Metodo: retornaConteudo Nome Arquivo: C:\Users\aroldo.andrade\Desktop\HAB\arquivosHAB Rejeitados\32aebf443081b31c7e297a4a1e0c2d82927eb3.TXT  Classe: controle.Controle
+Wed Jun 13 13:51:38 BRT 2018
+------------------------------------------------------------------
+-----------------------------------------------------------------
+java.lang.NumberFormatException: For input string: "               "
+Metodo: trataArquivo nome Arquivo: MOVV10062018001_10 AVISADOS MIP 30.05 A 10.06.txt  Classe: Controle_validador
+Wed Jun 13 15:56:54 BRT 2018
+------------------------------------------------------------------
