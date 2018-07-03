@@ -28,7 +28,7 @@ public class Controle_Tipo_10 {
 	public void receberArquivo(Arquivo_10 arquivo) {
 		
 		
-		//teste de commit
+		//teste de commit 2
 		this.arquivo = arquivo;
 		gerarResumo();
 		new View_Tipos(arquivo,true);
