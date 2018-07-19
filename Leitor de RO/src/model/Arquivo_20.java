@@ -3,6 +3,8 @@ package model;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import enums.Movimentos;
+
 public class Arquivo_20 extends Arquivo {
 
 	
@@ -13,14 +15,17 @@ public class Arquivo_20 extends Arquivo {
 	private double valorTotalDes;
 	private double valorTotalHon;
 	private ArrayList<Linha_20> linhas;
-	private double AjusteReservaAMaior;
-	private double AjusteReservaAMenor;
-	private double SolicitacaoPagamentoTotal;
-	private double CancelamentoDoAviso;
-	private double ReativacaoDoAviso;
-	private double BaixaSemIndenização;
-	private double CoberturaNegada;
-	private double SolicitacaoPagamentoParcial;
+	private ArrayList<String> ramos;
+	
+	
+	private ArrayList<Totais> ajusteReservaAMaiorTotais;
+	private ArrayList<Totais> ajusteReservaAMenorTotais;
+	private ArrayList<Totais> solicitacaoPagamentoTotalTotais;
+	private ArrayList<Totais> cancelamentoDoAvisoTotais;
+	private ArrayList<Totais> reativacaoDoAvisoTotais;
+	private ArrayList<Totais> baixaSemIndenizaçãoTotais;
+	private ArrayList<Totais> coberturaNegadaTotais;
+	private ArrayList<Totais> solicitacaoPagamentoParcialTotais;
 
 	
 	
@@ -29,6 +34,18 @@ public class Arquivo_20 extends Arquivo {
 	
 		linhas = new ArrayList<>();
 		
+	}
+	
+	public ArrayList<String> getRamos() {
+		ramos = new ArrayList<>();
+		
+		for (Linha_20 linha_20 : getLinhas()) {
+			String ramo = linha_20.getCodigoDoRamo();
+			if(!ramos.contains(ramo))ramos.add(ramo);
+		}
+		
+		
+		return ramos;
 	}
 	
 	
@@ -64,8 +81,6 @@ public class Arquivo_20 extends Arquivo {
 	public void setLinhas(ArrayList<Linha_20> linhas) {
 		this.linhas = linhas;
 	}
-
-
 
 	
 	public double getValorTotalPagamento() {
@@ -155,193 +170,73 @@ public class Arquivo_20 extends Arquivo {
 		this.valorTotalHon = valorTotalHon;
 	}
 
-
-	public double getAjusteReservaAMaior() {
+	
+	public ArrayList<Totais> somarMovimentacao(Movimentos mov) {
+		ArrayList<Totais> ret = new ArrayList<>();
 		
-		
-		AjusteReservaAMaior = 0;
-		
-		for (Linha_20 linha_20 : linhas) {
-			
-			if(linha_20.getTipodeMovimento().equals("01")) {
-				
-				AjusteReservaAMaior += (Double.parseDouble(linha_20.getValorMovimento())/100);
-				
+		Totais tot;
+		for(String ramo : getRamos()) {
+			tot = new Totais();
+			tot.setRamo(ramo);
+			tot.setMovimento(mov);
+			double val_tot = 0;
+			for (Linha_20 linha_20 : getLinhas()) {
+				if(Integer.parseInt(linha_20.getTipodeMovimento()) == tot.getMovimento().valor) {
+					val_tot += (Double.parseDouble(linha_20.getValorMovimento())/100);
+				}
 			}
-			
+			tot.setTotal(val_tot);
+			ret.add(tot);
 		}
-		
-		return AjusteReservaAMaior;
+		return ret;
+	}
+	
+	
+	public ArrayList<Totais> getAjusteReservaAMaiorTotais() {
+		return ajusteReservaAMaiorTotais = somarMovimentacao(Movimentos.Ajuste_reserva_a_maior);
 	}
 
-
-	public void setAjusteReservaAMaior(double ajusteReservaAMaior) {
-		AjusteReservaAMaior = ajusteReservaAMaior;
+	public ArrayList<Totais> getAjusteReservaAMenorTotais() {
+		return ajusteReservaAMenorTotais = somarMovimentacao(Movimentos.Ajuste_reserva_a_menor);
 	}
 
-
-	public double getAjusteReservaAMenor() {
-		
-		AjusteReservaAMenor = 0;
-		
-		for (Linha_20 linha_20 : linhas) {
-			
-			if(linha_20.getTipodeMovimento().equals("02")) {
-				
-				AjusteReservaAMenor += (Double.parseDouble(linha_20.getValorMovimento())/100);
-				
-			}
-			
-		}
-		
-		return AjusteReservaAMenor;
+	public ArrayList<Totais> getSolicitacaoPagamentoTotalTotais() {
+		return solicitacaoPagamentoTotalTotais = somarMovimentacao(Movimentos.Solicitação_Pagamento_Total);
 	}
 
-
-	public void setAjusteReservaAMenor(double ajusteReservaAMenor) {
-		AjusteReservaAMenor = ajusteReservaAMenor;
+	public ArrayList<Totais> getCancelamentoDoAvisoTotais() {
+		return cancelamentoDoAvisoTotais = somarMovimentacao(Movimentos.Cancelamento_do_Aviso);
 	}
 
-
-	public double getSolicitacaoPagamentoTotal() {
-		
-		
-		SolicitacaoPagamentoTotal = 0;
-		
-		for (Linha_20 linha_20 : linhas) {
-			
-			if(linha_20.getTipodeMovimento().equals("03")) {
-				
-				SolicitacaoPagamentoTotal += (Double.parseDouble(linha_20.getValorMovimento())/100);
-				
-			}
-			
-		}
-		
-		
-		return SolicitacaoPagamentoTotal;
+	public ArrayList<Totais> getReativacaoDoAvisoTotais() {
+		return reativacaoDoAvisoTotais = somarMovimentacao(Movimentos.Reativação_do_Aviso);
 	}
 
-
-	public void setSolicitacaoPagamentoTotal(double solicitacaoPagamentoTotal) {
-		SolicitacaoPagamentoTotal = solicitacaoPagamentoTotal;
+	public ArrayList<Totais> getBaixaSemIndenizaçãoTotais() {
+		return baixaSemIndenizaçãoTotais = somarMovimentacao(Movimentos.Baixa_sem_indenização);
 	}
 
-
-	public double getCancelamentoDoAviso() {
-		
-		CancelamentoDoAviso = 0;
-		
-		for (Linha_20 linha_20 : linhas) {
-			
-			if(linha_20.getTipodeMovimento().equals("04")) {
-				
-				CancelamentoDoAviso += (Double.parseDouble(linha_20.getValorMovimento())/100);
-				
-			}
-			
-		}
-		
-		
-		return CancelamentoDoAviso;
+	public ArrayList<Totais> getCoberturaNegadaTotais() {
+		return coberturaNegadaTotais = somarMovimentacao(Movimentos.Cobertura_Negada);
 	}
 
-
-	public void setCancelamentoDoAviso(double cancelamentoDoAviso) {
-		CancelamentoDoAviso = cancelamentoDoAviso;
+	public ArrayList<Totais> getSolicitacaoPagamentoParcialTotais() {
+		return solicitacaoPagamentoParcialTotais = somarMovimentacao(Movimentos.Solicitação_Pagamento_Parcial);
 	}
+	
+	
+	
+	
 
 
-	public double getReativacaoDoAviso() {
-		
-		ReativacaoDoAviso = 0;
-		
-		for (Linha_20 linha_20 : linhas) {
-			
-			if(linha_20.getTipodeMovimento().equals("05")) {
-				
-				ReativacaoDoAviso += (Double.parseDouble(linha_20.getValorMovimento())/100);
-				
-			}
-			
-		}
-		
-		
-		return ReativacaoDoAviso;
-	}
+	
 
 
-	public void setReativacaoDoAviso(double reativacaoDoAviso) {
-		ReativacaoDoAviso = reativacaoDoAviso;
-	}
 
 
-	public double getBaixaSemIndenização() {
-		
-		
-		BaixaSemIndenização = 0;
-		
-		for (Linha_20 linha_20 : linhas) {
-			
-			if(linha_20.getTipodeMovimento().equals("07")) {
-				
-				BaixaSemIndenização += (Double.parseDouble(linha_20.getValorMovimento())/100);
-				
-			}
-			
-		}
-		
-		
-		return BaixaSemIndenização;
-	}
 
 
-	public void setBaixaSemIndenização(double baixaSemIndenização) {
-		BaixaSemIndenização = baixaSemIndenização;
-	}
 
 
-	public double getCoberturaNegada() {
-		
-		CoberturaNegada = 0;
-		
-		for (Linha_20 linha_20 : linhas) {
-			
-			if(linha_20.getTipodeMovimento().equals("08")) {
-				
-				CoberturaNegada += (Double.parseDouble(linha_20.getValorMovimento())/100);
-				
-			}
-			
-		}
-		
-		return CoberturaNegada;
-	}
 
-
-	public void setCoberturaNegada(double coberturaNegada) {
-		CoberturaNegada = coberturaNegada;
-	}
-
-
-	public double getSolicitacaoPagamentoParcial() {
-		
-		SolicitacaoPagamentoParcial = 0;
-		
-		for (Linha_20 linha_20 : linhas) {
-			
-			if(linha_20.getTipodeMovimento().equals("09")) {
-				
-				SolicitacaoPagamentoParcial += (Double.parseDouble(linha_20.getValorMovimento())/100);
-				
-			}
-			
-		}
-		
-		return SolicitacaoPagamentoParcial;
-	}
-
-	public void setSolicitacaoPagamentoParcial(double solicitacaoPagamentoParcial) {
-		SolicitacaoPagamentoParcial = solicitacaoPagamentoParcial;
-	}
 }

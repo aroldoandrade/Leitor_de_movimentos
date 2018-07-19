@@ -3,8 +3,11 @@ package controle;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+import enums.Movimentos;
 import model.Arquivo_20;
+import model.Linha_10;
 import model.Linha_20;
+import model.Totais;
 import view.View_Tipos;
 
 public class Controle_Tipo_20 {
@@ -36,64 +39,30 @@ public class Controle_Tipo_20 {
 	public void gerarResumo() {
 		
 		NumberFormat df = NumberFormat.getCurrencyInstance();
-		ArrayList<String> ramos = new ArrayList<>();
-		ArrayList<String> tp_movs = new ArrayList<>();
 		
-		//8 tipos de movimentos
-		tp_movs.add("");tp_movs.add("");tp_movs.add("");tp_movs.add("");
-		tp_movs.add("");tp_movs.add("");tp_movs.add("");tp_movs.add("");
-		
-		String resumo = "";
-		double valor = 0;
-		
-		for (Linha_20 linha_20 : arquivo.getLinhas()) {
-			String ramo = linha_20.getCodigoDoRamo();
-			if(!ramos.contains(ramo))ramos.add(ramo);
+		String resumo="Ajuste Reserva a Maior:\n";
+		for(Totais tot : arquivo.getAjusteReservaAMaiorTotais()) {
+			resumo+="Ramo: "+tot.getRamo()+"\n";
+			resumo+="Valor: "+df.format(tot.getTotal())+"\n";
+		}
+		resumo+="Ajuste Reserva a Menor:\n";
+		for(Totais tot : arquivo.getAjusteReservaAMenorTotais()) {
+			resumo+="Ramo: "+tot.getRamo()+"\n";
+			resumo+="Valor: "+df.format(tot.getTotal())+"\n";
 		}
 		
-		for (String ramo : ramos) {
-			
-			for(int i = 0; i < tp_movs.size();i++) {
-				int contador = 0;
-				for (Linha_20 linha_20 : arquivo.getLinhas()) {
-					String tp = "";
-					if(i<5) tp = "0"+(i+1);
-					else tp = "0"+(i+2);
-					//System.out.println(tp);
-					if(linha_20.getCodigoDoRamo().equals(ramo) && 
-						(linha_20.getTipodeMovimento().equals(tp))) {
-					valor += (Double.parseDouble(linha_20.getValorMovimento())/100);
-					contador++;
-					}
-				
-				}
-			
-				resumo = tp_movs.get(i);
-				resumo+=ramo+" - "+df.format(valor)+" - "+contador+"\n";
-				tp_movs.set(i, resumo);
-				valor = 0;
-			}
-			
+		resumo+="Solicitação Pagamento Total:\n";
+		for(Totais tot : arquivo.getSolicitacaoPagamentoTotalTotais()) {
+			resumo+="Ramo: "+tot.getRamo()+"\n";
+			resumo+="Valor: "+df.format(tot.getTotal())+"\n";
 		}
 		
-		resumo = "Solicitaçao Pagamento Total"+"\n";
-		resumo += tp_movs.get(2); //03
-		resumo += "Ajuste reserva a maior "+"\n";
-		resumo += tp_movs.get(0); //01
-		resumo += "Ajuste reserva a menor "+"\n";
-		resumo += tp_movs.get(1); //02
-		resumo += "Cancelamento do Aviso "+"\n";
-		resumo += tp_movs.get(3); //04
-		resumo += "Cobertura Negada "+"\n";
-		resumo += tp_movs.get(6); //08
-		resumo += "Reativação do Aviso "+"\n";
-		resumo += tp_movs.get(4); //05
-		resumo += "Baixa sem indenização"+"\n";
-		resumo += tp_movs.get(5); //07
-		resumo += "Solicitação Pagamento Parcial "+"\n";
-		resumo += tp_movs.get(7); //09
+		resumo+="Solicitação Pagamento Parcial:\n";
+		for(Totais tot : arquivo.getSolicitacaoPagamentoParcialTotais()) {
+			resumo+="Ramo: "+tot.getRamo()+"\n";
+			resumo+="Valor: "+df.format(tot.getTotal())+"\n";
+		}
 		
-	
 		arquivo.setResumo(resumo);
 	}
 
